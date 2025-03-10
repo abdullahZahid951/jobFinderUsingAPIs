@@ -6,6 +6,28 @@ import credentials
 from llm import llmJobRelevanceCheckForLinkedIn
 from typing import List
 
+"""
+1) Before running this file kindly create credential.py file (as I didn't push my keys to github)
+    Inside create
+
+    LinkedInScrapper_api_key= "" 
+    You can get this key for free :) from https://rapidapi.com/fantastic-jobs-fantastic-jobs-default/api/linkedin-job-search-api
+
+
+    groq_api_key = ""
+    This we can easily also get from GroqCloud from free.
+
+2) Then run this file by
+    uvicorn linkedInJobFinder:app --reload
+
+
+3) Test API Locally on your browser by
+    http://127.0.0.1:8000/docs
+    And using endpoint /get-relevant-jobs/
+
+
+"""
+
 app = FastAPI()
 
 class UserChoices(BaseModel):
@@ -24,7 +46,7 @@ def root():
 def get_relevant_jobs(userChoicesDict: UserChoices):
     conn = http.client.HTTPSConnection("linkedin-job-search-api.p.rapidapi.com")
     headers = {
-        'x-rapidapi-key': credentials.api_key,
+        'x-rapidapi-key': credentials.LinkedInScrapper_api_key,
         'x-rapidapi-host': "linkedin-job-search-api.p.rapidapi.com"
     }
 
