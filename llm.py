@@ -1,4 +1,10 @@
 from groq import Groq
+from fastapi import FastAPI, HTTPException
+from typing import Optional, List, Dict, Any
+from DataHolderForIndeed import UserPreferences
+
+
+import json
 import credentials
 def llmJobRelevanceCheckForLinkedIn(user_preferences, job_data):
     client = Groq(
@@ -62,3 +68,32 @@ def llmJobRelevanceCheckForLinkedIn(user_preferences, job_data):
     except Exception as e:
         print(f"Error calling Groq API: {e}")
         return True 
+    
+
+
+
+
+def llmJobRelevanceCheckForIndeed(jobs: List[Dict], preferences: UserPreferences) -> Dict:
+    groq_client = Groq(api_key=credentials.groq_api_key)
+    
+    prompt = f"""
+    User preferences:
+    {json.dumps(preferences.dict(), indent=2)}
+    
+    Job listings:
+    {json.dumps(jobs, indent=2)}
+    
+    Score each job 0-100 based on preference matching. Consider skills, experience, salary, remote preference, location, company size, benefits, and responsibilities.
+    
+    Return JSON with rankings containing id, score, and explanation. Sort by score descending.
+    """
+    
+    try:
+        response = groq_client.chat.completions.create(
+            messages=[{"role": "user", "content": prompt}],
+            model="llama3-70b-8192",
+            response_format={"type": "json_object"}
+        )
+        return json.loads(response.choices[0].message.content)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"LLM processing failed: {str(e)}")
