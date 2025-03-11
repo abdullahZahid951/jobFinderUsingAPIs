@@ -4,6 +4,43 @@ import requests
 import credentials
 import json
 
+
+"""
+1) Before running this file kindly create credential.py file (as I didn't push my keys to github)
+    Inside create
+
+    indeedJobFinder.py_api_key= "" 
+    You can get this key for free :) from https://rapidapi.com/border-line-border-line-default/api/indeed-scraper-api
+
+    groq_api_key = ""
+    This we can easily also get from GroqCloud from free.
+
+2) Then run this file by
+    uvicorn indeedJobFinder.py:app --reload
+
+
+3) Test API Locally on your browser by
+    http://127.0.0.1:8000/docs
+    
+
+
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app = FastAPI()
 
 # Define request body schema
